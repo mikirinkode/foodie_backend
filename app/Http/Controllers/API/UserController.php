@@ -10,6 +10,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -96,6 +97,65 @@ class UserController extends Controller
                 'message' => 'something went wrong',
                 'error' => $error
             ], 'Authentication Failed', 500);
+        }
+    }
+
+    public function logout (Request $request){
+
+        // harus mengirimkan token yang diberikan ketika register / login
+        // laravel sdh menyediakan fungsi fungsi ajaib wkkw
+        // sehingga kita tidak perlu repot repot
+        $token = $request->user()->currentAccessToken()->delete();
+
+        return ResponseFormatter::success($token, 'Token Revoked');
+    }
+
+    public function fetch(Request $request){
+        return ResponseFormatter::success($request->user(), 'User profile data has been retrieved successfully');
+    }
+
+    public function updateProfile (Request $request){
+        
+        // ambil semua data yang masuk di request update
+        $data = $request->all();
+
+        $user = Auth::user();
+        $user->update($data);
+
+        return ResponseFormatter::success($user, 'Profile Updated');
+    }
+
+    public function updatePhoto(Request $request){
+
+        // validasi data yang dikirim
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|image|max:2048'
+        ]);
+
+
+        if ($validator->fails()){
+            return ResponseFormatter::error(
+                ['error' => $validator->errors()],
+                'Update photo fails',
+                401
+            );
+        }
+
+        // proses upload
+        if ($request->file('file')){
+            $file = $request->file->store('assets/user','public'); // agar bisa akses dimana saja
+
+
+            // simpan photo ke database (urlnya)
+            $user = Auth::user();
+
+            // update field pada db (dengan fungsi bawaan laravel)
+            $user->profile_photo_url = $file;
+            $user->update();    // biarkan saja karena memang tidak terdeteksi
+            
+            return ResponseFormatter::success(
+                [$file, 'Photo Successfully Uploaded']
+            );
         }
     }
 }
