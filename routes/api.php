@@ -27,6 +27,10 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('logout', [UserController::class, 'logout ']);
 
     Route::get('transaction', [TransactionController::class, 'all']);
+
+    // NOTE: Fungsi berikut tidak disarankan ada
+    // hanya untuk testing saja
+    Route::post('transaction/{id}', [TransactionController::class, 'update']);
 });
 
 // jika user belum login (dapat diakses tanpa harus login)

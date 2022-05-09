@@ -55,4 +55,15 @@ class TransactionController extends Controller
             'List data of Transactions retrived successfully'
         );
     }
+
+    // fungsi untuk update transaksi ketika berhasil atau gagal 
+    // hanya sebagai testing saja  
+    // sebenarnya kurang aman dan direkomendasikan untuk di-comment saja
+    public function update(Request $request, $id){
+        $transaction = Transaction::findOrFail($id);
+
+        $transaction->update($request->all()); // meng-update semua yang ada di-request
+        
+        return ResponseFormatter::success($transaction, 'Transaction data successfully updated');
+    }
 }
