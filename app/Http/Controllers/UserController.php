@@ -71,9 +71,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('users.edit', [
+            'item' => $user
+        ]);
     }
 
     /**
@@ -83,9 +85,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, User $user)
     {
-        //
+        $data = $request->all();
+
+        if ($request->file('profile_photo_path')){
+            $data['profile_photo_path'] = $request->file('profile_photo_path')->store('assets/user', 'public');
+        }
+
+        $user->update($data);
+        return redirect()->route('users.index');
     }
 
     /**
