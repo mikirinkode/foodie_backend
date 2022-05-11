@@ -41,12 +41,16 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        // digunakan ketika upload photo
+        // pertama adalah mengambil data dengan validasi yang ada pada class UserRequest
+    
         $data = $request->all();
 
         $data['profile_photo_path'] = $request->file('profile_photo_path')->store('assets/user', 'public');
-
+        
         User::create($data);
 
+        // setelah menyimpan, kembali ke halaman user
         return redirect()->route('users.index');
     }
 
