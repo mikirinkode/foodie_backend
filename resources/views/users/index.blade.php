@@ -31,7 +31,7 @@
                                 <td class="border px-6 py04">{{ $item->id }}</td>
                                 <td class="border px-6 py04">{{ $item->name }}</td>
                                 <td class="border px-6 py04">{{ $item->email }}</td>
-                                <td class="border px-6 py04">{{ $item->rolse }}</td>
+                                <td class="border px-6 py04">{{ $item->roles }}</td>
                                 <td class="border px-6 py04 text-center">
                                     <a href="{{ route('users.edit', $item->id) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 mx-2 rounded">Edit</a>
                                     <form action="{{ route('users.destroy', $item->id) }}" method="POST" class="inline-block">
