@@ -69,7 +69,9 @@ class FoodController extends Controller
      */
     public function edit(Food $food)
     {
-        //
+        return view('food.edit', [
+            'item' => $food
+        ]);
     }
 
     /**
@@ -79,9 +81,16 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Food $food)
+    public function update(FoodRequest $request, Food $food)
     {
-        //
+        $data = $request->all();
+
+        if ($request->file('picturePath')){
+            $data['picturePath'] = $request->file('picturePath')->store('assets/food', 'public');
+        }
+
+        $food->update($data);
+        return redirect()->route('food.index');
     }
 
     /**
