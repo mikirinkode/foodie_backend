@@ -101,6 +101,8 @@ class FoodController extends Controller
      */
     public function destroy(Food $food)
     {
-        //
+        // data akan tetap ada di database, karena menggunakan soft delete
+        $food->delete();
+        return redirect()->route('food.index');
     }
 }
